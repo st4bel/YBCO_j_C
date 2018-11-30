@@ -1,7 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
-
+from scipy.optimize import curve_fit
 #x=[]
 #y=[]
 
@@ -39,15 +39,25 @@ def correctOffset(csv,offset):
         csv["y"][i]-=offset
     return csv
 
+def j_C_lin_pol(x,V_0,V_1,I_c,n):
+    #V_0: Offset, V_1: lin Anteil, V_c: Spannung bei der I_c bestimmt wird (10µV), I_c: kritische Stromdichte, n: poly. Grad
+    return V_0 + V_1 * x + .01 * np.power(x / I_c , n)
+
+
 
 
 filename = "S088_U(I)_B7_6mA.txt"
 content = readfile(filename)
-print(getOffset(content))
-content = correctOffset(offset=getOffset(content)["zeros"], csv=content)
+#print(getOffset(content))
+#content = correctOffset(offset=getOffset(content)["zeros"], csv=content)
 
+#popt, pcov = curve_fit(j_C_lin_pol, content["x"], content["y"], bounds=([-.1,-1,.004,3],[0,1,.006,11]))
+#print(popt)
+p5 = np.poly1d(np.polyfit(content["x"], content["y"],5))
 
-plt.plot(content["x"],content["y"],label="U(I)")
+plt.plot(content["x"],content["y"], "-b", label="U(I)")
+plt.plot(content["x"],p5(content["x"]),"-r")
+#plt.plot(content["x"],j_C_lin_pol(content["x"],*popt), "-r", label = "fit: V_0=%5.3f, V_1=%5.3f, V_c=%5.3f, I_c=%5.3f, n=%5.3f" % tuple(popt))
 plt.xlabel('x')
 plt.ylabel('y')
 plt.title(filename)
