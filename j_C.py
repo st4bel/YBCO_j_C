@@ -39,28 +39,42 @@ def correctOffset(csv,offset):
         csv["y"][i]-=offset
     return csv
 
-def j_C_lin_pol(x,V_0,V_1,I_c):
+def j_C_lin_pol(x,V_0,V_1,I_c,n):
     #V_0: Offset, V_1: lin Anteil, V_c: Spannung bei der I_c bestimmt wird (10µV), I_c: kritische Stromdichte, n: poly. Grad
-    return V_0 + (V_1 * x) + 10*np.power((x / I_c ),11)
+    return V_0 + (V_1 * x) + 10*np.power((x / I_c ),int(n))
+
+def solve_for_y(pcoeff, y):
+    pcopy = pcoeff.copy()
+    pcopy[-1] -= y
+    return np.roots(pcopy)
+
+def solve_for_y_real(pcoeff,y):
+    roots = np.array(solve_for_y(pcoeff, y))
+    realroots = np.array([])
+    for root in roots:
+        if root.imag == 0:
+            realroots = np.append(realroots, [root.real])
+    return realroots
 
 
 
-
-filename = "S088_U(I)_B7_6mA.txt"
+filename = "S256_U(I)_A8_45000uA.txt"
 xdata, ydata = readfile(filename)
 #print(getOffset(content))
 #content = correctOffset(offset=getOffset(content)["zeros"], csv=content)
 
-popt, pcov = curve_fit(j_C_lin_pol, xdata, ydata)#, bounds=([-.1,-1,.004],[0,1,.006]))
+popt, pcov = curve_fit(j_C_lin_pol, xdata, ydata, bounds=([-50,-1,5,5],[50,1,50,13]))
 print(popt)
 
 xrange = np.linspace(np.amin(xdata),np.amax(xdata),100)
 
-plt.plot(xrange,j_C_lin_pol(xrange,*popt),"--g",label="fit: V_0=%5.3f, V_1=%5.3f, I_c=%5.3f" % tuple(popt))
+plt.plot(xrange,j_C_lin_pol(xrange,*popt),"--g",label="fit: V_0=%5.3f, V_1=%5.3f, I_c=%5.3f, n=%5.3f" % tuple(popt))
 
-
-p11 = np.poly1d(np.polyfit(xdata, ydata,11))
-plt.plot(xdata,p11(xdata),"-r",label="n=11")
+p11 =  np.polyfit(xdata, ydata,11)
+roots = solve_for_y_real(p11, p11[-1]+10)
+p = np.poly1d(p11)
+plt.plot(xdata,p(xdata),"-r",label="n=11")
+plt.plot([roots[0]]*2,[np.amin(ydata),np.amax(ydata)],"--r")
 
 plt.plot(xdata,ydata, ".b", label="U(I)")
 plt.plot(xrange,[popt[0]+10]*100,"--b")
