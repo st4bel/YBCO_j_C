@@ -56,9 +56,16 @@ def solve_for_y_real(pcoeff,y):
             realroots = np.append(realroots, [root.real])
     return realroots
 
+def filter_roots_by_range(roots,min,max):
+    froots = np.array([])
+    for root in roots:
+        if min < root and root < max:
+            froots = np.append(froots,[root])
+    return froots
 
 
-filename = "S256_U(I)_A8_45000uA.txt"
+
+filename = "S088_U(I)_B4_5500uA.txt"
 xdata, ydata = readfile(filename)
 #print(getOffset(content))
 #content = correctOffset(offset=getOffset(content)["zeros"], csv=content)
@@ -72,9 +79,11 @@ plt.plot(xrange,j_C_lin_pol(xrange,*popt),"--g",label="fit: V_0=%5.3f, V_1=%5.3f
 
 p11 =  np.polyfit(xdata, ydata,11)
 roots = solve_for_y_real(p11, p11[-1]+10)
+froots = filter_roots_by_range(roots = roots, min = np.amin(xdata), max = np.amax(xdata))
 p = np.poly1d(p11)
-plt.plot(xdata,p(xdata),"-r",label="n=11")
-plt.plot([roots[0]]*2,[np.amin(ydata),np.amax(ydata)],"--r")
+plt.plot(xrange,p(xrange),"-r",label="n=11")
+plt.plot(xrange,[p11[-1]+10]*100,"--r")
+plt.plot([froots[0]]*2,[np.amin(ydata),np.amax(ydata)],"--r")
 
 plt.plot(xdata,ydata, ".b", label="U(I)")
 plt.plot(xrange,[popt[0]+10]*100,"--b")
