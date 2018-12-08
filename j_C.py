@@ -2,14 +2,6 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
-#x=[]
-#y=[]
-
-#lol=list(csv.reader(open("S088_U(I)_B7_6mA.txt","rt"), delimiter="\t"))
-#for row in lol:
-#    if len(row) > 1:
-#        x.append(float(row[0]))
-#        y.append(float(row[1]))
 
 
 def readfile(filename):
