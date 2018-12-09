@@ -4,8 +4,26 @@
 
 <h1>File: {{filename}}</h1>
 
-plot of file:
-<img src="{{filename}}_plot.png" alt="Plot of File: {{filename}}">
+<p>plot of file:</p>
+<p>
+  <a href="{{url_for('click_plot', filename = filename, plot = 'file')}}">
+    <img src="{{url_for('static',filename = filename + '_plot.png')}}" alt="Plot of File: {{filename}}">
+  </a>
+</p>
+
+<form action="" method="post">
+<p>
+  {{ form.submit() }}
+</p>
+</form>
+
+<p>plot of j_C</p>
+<p>
+  <a href="{{url_for('click_plot', filename = filename, plot = 'j_C')}}">
+    <img src="{{url_for('static', filename = filename + '_j_C.png')}}" alt="j_C plot of File: {{filename}}">
+  </a>
+</p>
+
 
 
 {% endblock %}

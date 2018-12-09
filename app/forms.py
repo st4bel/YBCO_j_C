@@ -8,3 +8,6 @@ from app import app
 class UploadForm(FlaskForm):
     file = FileField("File Upload")
     submit = SubmitField("Upload")
+
+class PlotForm(FlaskForm):
+    submit = SubmitField("Plot and calculate j_C")
