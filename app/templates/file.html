@@ -4,24 +4,27 @@
 
 <h1>File: {{filename}}</h1>
 
-<p>plot of file:</p>
-<p>
-  <a href="{{url_for('click_plot', filename = filename, plot = 'file')}}">
-    <img src="{{url_for('static',filename = filename + '_plot.png')}}" alt="Plot of File: {{filename}}">
-  </a>
-</p>
-
 <form action="" method="post">
 <p>
-  {{ form.submit() }}
+  {{ form.calc_j_C() }}
+</p>
+<p>
+  {{ form.show_norm() }}
+</p>
+<p>
+  {{ form.show_j_C() }}
 </p>
 </form>
 
+<p>plot of file:</p>
+<p>
+  <img src="{{url_for('static',filename = filename + '_plot.png')}}" alt="Plot of File: {{filename}}">
+</p>
+
+
 <p>plot of j_C</p>
 <p>
-  <a href="{{url_for('click_plot', filename = filename, plot = 'j_C')}}">
-    <img src="{{url_for('static', filename = filename + '_j_C.png')}}" alt="j_C plot of File: {{filename}}">
-  </a>
+  <img src="{{url_for('static', filename = filename + '_j_C.png')}}" alt="j_C plot of File: {{filename}}">
 </p>
 
 

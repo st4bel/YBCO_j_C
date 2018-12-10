@@ -24,8 +24,8 @@ def upload():
                 return redirect(url_for("upload"))
             new_document = Document(filename=filename)
             db.session.add(new_document)
-            db.session.commit()
             f.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+            db.session.commit()
         return redirect(url_for("index"))
     return render_template("upload.html", form=form)
 
@@ -33,21 +33,19 @@ def upload():
 def file(filename):
     form = PlotForm()
     if request.method == "POST":
-        plot_j_C(filename)
-        close_plot()
+        if form.calc_j_C.data:
+            plot_j_C(filename)
+            close_plot()
+        elif form.show_norm.data:
+            plot_file(filename)
+            show_plot()
+        elif form.show_j_C.data:
+            plot_j_C(filename)
+            show_plot()
+
         return redirect(url_for("file", filename = filename))
     if not os.path.isfile(plotpath(filename, "_plot.png")):
         #creating simple plots
         plot_file(filename)
         close_plot()
     return render_template("file.html",form = form, filename = filename, files = Document.query.all())
-
-def click_plot(filename,plot):
-    if plot is not None or "":
-        if plot == "j_C":
-            plot_j_C(filename)
-        elif plot == "file":
-            plot_file(filename)
-        show_plot()
-
-    return render_template("click.html")

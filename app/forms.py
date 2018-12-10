@@ -10,4 +10,6 @@ class UploadForm(FlaskForm):
     submit = SubmitField("Upload")
 
 class PlotForm(FlaskForm):
-    submit = SubmitField("Plot and calculate j_C")
+    calc_j_C = SubmitField("Plot and calculate j_C")
+    show_norm = SubmitField("Show plotwindow for file")
+    show_j_C = SubmitField("Show plotwindow of j_C")
