@@ -6,11 +6,26 @@ from app.j_C_intern import plot_file, filepath, plotpath, plot_j_C, close_plot, 
 from flask import render_template, url_for, flash, redirect, request
 from werkzeug.utils import secure_filename
 
+def deleteFile(filename):
+    file=Document.query.filter_by(filename = filename).first()
+    db.session.delete(file)
+    db.session.commit()
+    os.remove(filepath(filename))
+    if os.path.isfile(plotpath(filename,"_plot.png")):
+        os.remove(plotpath(filename,"_plot.png"))
+    if os.path.isfile(plotpath(filename,"_j_C.png")):
+        os.remove(plotpath(filename,"_j_C.png"))
+    flash("removed all Files of: "+filename)
+
 @app.route("/")
-@app.route("/index")
+@app.route("/index",methods=["POST","GET"])
 def index():
+    form=DeleteAllFiles()
     files = Document.query.all()
-    return render_template("index.html", title="home", files = files)
+    if request.method =="POST":
+        for file in files:
+            deleteFile(file.filename)
+    return render_template("index.html", title="home", files = files,form=form)
 
 @app.route("/upload", methods = ["GET" ,"POST"])
 def upload():
@@ -55,6 +70,8 @@ def file(filename):
 
             plot_j_C(filename)
             close_plot()
+        elif form.delete.data:
+            deleteFile(filename)
 
         return redirect(url_for("file", filename = filename))
     if not os.path.isfile(plotpath(filename, "_plot.png")):

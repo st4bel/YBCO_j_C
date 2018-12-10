@@ -10,6 +10,7 @@ class UploadForm(FlaskForm):
     submit = SubmitField("Upload")
 
 class PlotForm(FlaskForm):
+    delete = SubmitField("Delete this File")
     calc_j_C = SubmitField("Plot and calculate j_C")
     show_norm = SubmitField("Show plotwindow for file")
     show_j_C = SubmitField("Show plotwindow of j_C")
@@ -18,3 +19,6 @@ class PlotOptionsForm(FlaskForm):
     checkbox = SelectMultipleField("checkbox",
         choices=[("remove_offset","Remove Offset"),("remove_ohm","Remove ohmic resistance")])
     submit = SubmitField("Refresh with options")
+
+class DeleteAllFiles(FlaskForm):
+    submit = SubmitField("Delete all uploaded files")

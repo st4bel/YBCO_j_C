@@ -85,7 +85,7 @@ def plot_j_C(filename):
 
     plt.plot(xrange,[p11[-1]+10]*100,"--r")
     if len(froots)==1:
-        plt.plot([froots[0]]*2,[np.amin(ydata),np.amax(ydata)],"--r", label = "j_C = "+str(froots[0])+"mA")
+        plt.plot([froots[0]]*2,[np.amin(ydata),np.amax(ydata)],"--r", label = "j_C = %.3fmA"%froots[0])
 
     plt.xlabel('I in mA')
     plt.ylabel('U in uV')
