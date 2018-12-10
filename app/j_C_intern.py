@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from app import app
 import os
+from app.models import *
 
 def filepath(filename):
     return os.path.join(app.config["UPLOAD_FOLDER"],filename)
@@ -60,9 +61,20 @@ def plot_file(filename):
     plt.savefig(plotpath(filename,"_plot.png"))
 
 def plot_j_C(filename):
+    file = Document.query.filter_by(filename=filename).first()
     xdata, ydata = readfile(filepath(filename))
     xrange = np.linspace(np.amin(xdata),np.amax(xdata),100)
     p11 =  np.polyfit(xdata, ydata,11)
+    if file.remove_offset ==True:
+        for i in range(0,len(ydata)):
+            ydata[i] -= p11[-1]
+        p11 = np.polyfit(xdata,ydata,11)
+
+    if file.remove_ohm:
+        for i in range(0,len(ydata)):
+            ydata[i] -= p11[-2]*xdata[i]
+        p11 = np.polyfit(xdata,ydata,11)
+
     p = np.poly1d(p11)
     roots = solve_for_y_real(p11, p11[-1]+10)
     froots = filter_roots_by_range(roots = roots, min = np.amin(xdata), max = np.amax(xdata))

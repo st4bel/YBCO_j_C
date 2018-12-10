@@ -27,6 +27,16 @@
   <img src="{{url_for('static', filename = filename + '_j_C.png')}}" alt="j_C plot of File: {{filename}}">
 </p>
 
+<form action="" method="post">
+  <p>
+    {{ form2.checkbox.label }}<br>
+    {{ form2.checkbox() }}
+  </p>
+  <p>
+    {{ form2.submit() }}
+  </p>
+</form>
+
 
 
 {% endblock %}
