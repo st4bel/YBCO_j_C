@@ -17,14 +17,15 @@ def deleteFile(filename):
         os.remove(plotpath(filename,"_j_C.png"))
     flash("removed all Files of: "+filename)
 
-@app.route("/")
-@app.route("/index",methods=["POST","GET"])
+@app.route("/", methods=["POST","GET"])
+@app.route("/index", methods=["POST","GET"])
 def index():
     form=DeleteAllFiles()
     files = Document.query.all()
     if request.method =="POST":
         for file in files:
             deleteFile(file.filename)
+        return redirect(url_for("index"))
     return render_template("index.html", title="home", files = files,form=form)
 
 @app.route("/upload", methods = ["GET" ,"POST"])
@@ -44,7 +45,7 @@ def upload():
             f.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
             db.session.commit()
         return redirect(url_for("index"))
-    return render_template("upload.html", form=form)
+    return render_template("upload.html", form=form, files = Document.query.all())
 
 @app.route("/file/<filename>", methods=["GET", "POST"])
 def file(filename):
@@ -72,6 +73,7 @@ def file(filename):
             close_plot()
         elif form.delete.data:
             deleteFile(filename)
+            return redirect(url_for("index"))
 
         return redirect(url_for("file", filename = filename))
     if not os.path.isfile(plotpath(filename, "_plot.png")):

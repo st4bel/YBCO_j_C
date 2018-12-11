@@ -53,7 +53,7 @@ def show_plot():
 
 def plot_file(filename):
     xdata, ydata = readfile(filepath(filename))
-    plt.plot(xdata,ydata,"b",label="U(I)")
+    plt.plot(xdata,ydata,".b",label="U(I)")
     plt.xlabel("I in mA")
     plt.ylabel("U in uV")
     plt.legend()
@@ -79,7 +79,7 @@ def plot_j_C(filename):
     roots = solve_for_y_real(p11, p11[-1]+10)
     froots = filter_roots_by_range(roots = roots, min = np.amin(xdata), max = np.amax(xdata))
 
-    plt.plot(xdata,ydata, "b", label="U(I)")
+    plt.plot(xdata,ydata, ".b", label="U(I)")
 
     plt.plot(xrange,p(xrange),"-r",label="polyfit: n=11")
 
