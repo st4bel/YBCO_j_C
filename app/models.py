@@ -5,7 +5,7 @@ class Document(db.Model):
     filename = db.Column(db.String(64))
     remove_offset = db.Column(db.Boolean,default=False)
     remove_ohm = db.Column(db.Boolean,default=False)
-
+    amplification = db.Column(db.Integer, default = 1000)
 
     def __repr__(self):
         return "<Document {}>".format(self.filename)

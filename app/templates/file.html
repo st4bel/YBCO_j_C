@@ -17,6 +17,16 @@
 <p>
   {{ form.show_j_C() }}
 </p>
+<p>
+  {{ form.amplification.label }}<br>
+  {{ form.amplification() }}
+  {% for error in form.amplification.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+  {% endfor %}
+</p>
+<p>
+  {{ form.submit_amplification() }}
+</p>
 </form>
 
 <p>plot of file:</p>

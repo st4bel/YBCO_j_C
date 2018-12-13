@@ -11,17 +11,17 @@ def filepath(filename):
 def plotpath(filename, extension=".png"):
     return os.path.join(app.config["PLOT_FOLDER"],filename + extension)
 
-def readfile(filename):
+def readfile(filepath, u_amp=1000):
     x=np.array([])
     y=np.array([])
 
-    lol=list(csv.reader(open(filename,"rt"), delimiter="\t"))
+    lol=list(csv.reader(open(filepath,"rt"), delimiter="\t"))
     for row in lol:
         if len(row) == 1:
             header = row[0]
         elif len(row) > 1:
             x=np.append(x,[float(row[0])*1000])
-            y=np.append(y,[float(row[1])*1000])
+            y=np.append(y,[float(row[1])*u_amp])
     return x,y
 
 def solve_for_y(pcoeff, y):
@@ -52,7 +52,8 @@ def show_plot():
     plt.close()
 
 def plot_file(filename):
-    xdata, ydata = readfile(filepath(filename))
+    file = Document.query.filter_by(filename=filename).first()
+    xdata, ydata = readfile(filepath = filepath(filename), u_amp = file.amplification)
     plt.plot(xdata,ydata,".b",label="U(I)")
     plt.xlabel("I in mA")
     plt.ylabel("U in uV")
@@ -62,7 +63,7 @@ def plot_file(filename):
 
 def plot_j_C(filename):
     file = Document.query.filter_by(filename=filename).first()
-    xdata, ydata = readfile(filepath(filename))
+    xdata, ydata = readfile(filepath = filepath(filename), u_amp = file.amplification)
     xrange = np.linspace(np.amin(xdata),np.amax(xdata),100)
     p11 =  np.polyfit(xdata, ydata,11)
     if file.remove_offset ==True:

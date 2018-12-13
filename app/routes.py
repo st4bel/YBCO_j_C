@@ -74,6 +74,12 @@ def file(filename):
         elif form.delete.data:
             deleteFile(filename)
             return redirect(url_for("index"))
+        elif form.submit_amplification.data:
+            flash(form.amplification.data)
+            file = Document.query.filter_by(filename=filename).first()
+            file.amplification = form.amplification.data
+            db.session.add(file)
+            db.session.commit()
 
         return redirect(url_for("file", filename = filename))
     if not os.path.isfile(plotpath(filename, "_plot.png")):
