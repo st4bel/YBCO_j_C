@@ -49,7 +49,10 @@ def upload():
 
 @app.route("/file/<filename>", methods=["GET", "POST"])
 def file(filename):
+    file = Document.query.filter_by(filename=filename).first_or_404()
     form = PlotForm()
+    form.amplification.default = file.amplification
+
     form2 = PlotOptionsForm()
     if request.method == "POST":
         if form.calc_j_C.data:
@@ -63,7 +66,6 @@ def file(filename):
             show_plot()
         elif form2.submit.data:
             flash(form2.checkbox.data)
-            file = Document.query.filter_by(filename=filename).first()
             file.remove_offset = "remove_offset" in form2.checkbox.data
             file.remove_ohm = "remove_ohm" in form2.checkbox.data
             db.session.add(file)
@@ -76,7 +78,6 @@ def file(filename):
             return redirect(url_for("index"))
         elif form.submit_amplification.data:
             flash(form.amplification.data)
-            file = Document.query.filter_by(filename=filename).first()
             file.amplification = form.amplification.data
             db.session.add(file)
             db.session.commit()
@@ -86,4 +87,5 @@ def file(filename):
         #creating simple plots
         plot_file(filename)
         close_plot()
+    form.process()
     return render_template("file.html",form = form, form2=form2, filename = filename, files = Document.query.all())

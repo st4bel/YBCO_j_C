@@ -54,7 +54,7 @@ def show_plot():
 def plot_file(filename):
     file = Document.query.filter_by(filename=filename).first()
     xdata, ydata = readfile(filepath = filepath(filename), u_amp = file.amplification)
-    plt.plot(xdata,ydata,".b",label="U(I)")
+    plt.plot(xdata,ydata,".b",label="U(I), amplification = "+file.amplification)
     plt.xlabel("I in mA")
     plt.ylabel("U in uV")
     plt.legend()
@@ -80,7 +80,7 @@ def plot_j_C(filename):
     roots = solve_for_y_real(p11, p11[-1]+10)
     froots = filter_roots_by_range(roots = roots, min = np.amin(xdata), max = np.amax(xdata))
 
-    plt.plot(xdata,ydata, ".b", label="U(I)")
+    plt.plot(xdata,ydata, ".b", label="U(I), amplification = "+file.amplification)
 
     plt.plot(xrange,p(xrange),"-r",label="polyfit: n=11")
 
