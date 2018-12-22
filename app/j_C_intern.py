@@ -44,6 +44,19 @@ def filter_roots_by_range(roots,min,max):
             froots = np.append(froots,[root])
     return froots
 
+def calculate_ohmig_res(xdata, ydata, j_C):
+    permutation = xdata.argsort()
+    xsorted = xdata[permutation]
+    ysorted = ydata[permutation]
+    #cutting x and y to -j_C/2 <= x <= j_C/2
+    cut = np.logical_and(xdata>=-j_C/2,xdata<=j_C/2)
+    xcut = xdata[cut]
+    ycut = ydata[cut]
+
+    #polyfit for n=1
+    p1 = np.polyfit(xcut,ycut,1)
+    return p1[0]
+
 def close_plot():
     plt.close()
 
@@ -79,6 +92,7 @@ def plot_j_C(filename):
     p = np.poly1d(p11)
     roots = solve_for_y_real(p11, p11[-1]+10)
     froots = filter_roots_by_range(roots = roots, min = np.amin(xdata), max = np.amax(xdata))
+    ohmic_res= calculate_ohmig_res(xdata,ydata,froots[0])
 
     plt.plot(xdata,ydata, ".b", label="U(I), amplification = "+file.amplification)
 
