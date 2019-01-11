@@ -5,17 +5,8 @@ from app.models import *
 from app.j_C_intern import plot_file, filepath, plotpath, plot_j_C, close_plot, show_plot
 from flask import render_template, url_for, flash, redirect, request
 from werkzeug.utils import secure_filename
+from app.filehandler import deleteFile
 
-def deleteFile(filename):
-    file=Document.query.filter_by(filename = filename).first()
-    db.session.delete(file)
-    db.session.commit()
-    os.remove(filepath(filename))
-    if os.path.isfile(plotpath(filename,"_plot.png")):
-        os.remove(plotpath(filename,"_plot.png"))
-    if os.path.isfile(plotpath(filename,"_j_C.png")):
-        os.remove(plotpath(filename,"_j_C.png"))
-    flash("removed all Files of: "+filename)
 
 @app.route("/", methods=["POST","GET"])
 @app.route("/index", methods=["POST","GET"])
@@ -46,6 +37,11 @@ def upload():
             db.session.commit()
         return redirect(url_for("index"))
     return render_template("upload.html", form=form, files = Document.query.all())
+
+@app.route("/edit/<filename>", methods = ["GET", "POST"])
+def edit_file_information(filename):
+    return render_template("editfile.html",filename = filename)
+
 
 @app.route("/file/<filename>", methods=["GET", "POST"])
 def file(filename):

@@ -24,3 +24,7 @@ class PlotOptionsForm(FlaskForm):
 
 class DeleteAllFiles(FlaskForm):
     submit = SubmitField("Delete all uploaded files")
+
+class Editfile(FlaskForm):
+
+    submit = SubmitField("Submit")
