@@ -124,8 +124,12 @@ def plot_j_C(filename):
     plt.plot(xrange,[p11[-1]+10]*100,"--r")
     if len(froots)==1:
         plt.plot([froots[0]]*2,[np.amin(ydata),np.amax(ydata)],"--r", label = "j_C = %.3fmA"%froots[0])
+        file.j_C = froots[0]
 
     plt.plot(xrange,ohmic_res_p1[0]*xrange+ohmic_res_p1[-1],"--g", label = "R = %.5fmOhm"%ohmic_res_p1[0])
+    file.res = ohmic_res_p1[0]
+    db.session.add(file)
+    db.session.commit()
     #plt.plot(xrange,dy,"--y", label = "derivate of p11")
     #plt.plot(xrange,d2y,"g", label = "2nd derivate of p11")
     plt.xlabel('I in mA')

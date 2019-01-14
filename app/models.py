@@ -7,6 +7,8 @@ class Document(db.Model):
     remove_offset = db.Column(db.Boolean,default=False)
     remove_ohm = db.Column(db.Boolean,default=False)
     amplification = db.Column(db.Integer, default = 1000)
+    j_C = db.Column(db.Float)
+    res = db.Column(db.Float)
 
     def __repr__(self):
         return "<Document {}>".format(self.filename)
@@ -24,10 +26,12 @@ class Substrate(db.Model):
 
 class Bridge(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    subtrate_id = db.Column(db.Integer, db.ForeignKey("substrate.id"))
+    substrate_id = db.Column(db.Integer, db.ForeignKey("substrate.id"))
     bridgename = db.Column(db.String(32))
+    j_C = db.Column(db.Float)
+    res = db.Column(db.Float)
 
     documents = db.relationship("Document", backref = "bridge", lazy = "dynamic")
-    
+
     def __repr__(self):
         return "<Bridge {}>".format(self.bridgename)

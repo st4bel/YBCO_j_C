@@ -5,7 +5,7 @@ from app.models import *
 from app.j_C_intern import plot_file, filepath, plotpath, plot_j_C, close_plot, show_plot
 from flask import render_template, url_for, flash, redirect, request
 from werkzeug.utils import secure_filename
-from app.filehandler import deleteFile
+from app.filehandler import *
 
 
 @app.route("/", methods=["POST","GET"])
@@ -35,6 +35,7 @@ def upload():
             db.session.add(new_document)
             f.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
             db.session.commit()
+            detect_substrate_bridge(filename)
         return redirect(url_for("index"))
     return render_template("upload.html", form=form, files = Document.query.all())
 
@@ -84,4 +85,4 @@ def file(filename):
         plot_file(filename)
         close_plot()
     form.process()
-    return render_template("file.html",form = form, form2=form2, filename = filename, files = Document.query.all())
+    return render_template("file.html",form = form, form2=form2, file = file, files = Document.query.all())
