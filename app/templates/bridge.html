@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Bridge: {{bridge.bridgename}}</h1>
+<p>Substrate: <a href="{{url_for('substrate',substratename=bridge.substrate.substratename)}}">{{bridge.substrate.substratename}}</a></p>
+
+<p>Files:<p>
+<table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">I_C in mA</th>
+      <th scope="col">Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for file in bridge.documents.all() %}
+    <tr>
+      <th scope="row">{{ file.filename }}</th>
+      <th>{% if file.j_C %}{{ "%.5f"%file.j_C }}{% else %}Unknown{% endif %}</th>
+      <th><a href="{{url_for('file', filename = file.filename) }}">Link</a></th>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

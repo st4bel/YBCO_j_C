@@ -16,6 +16,7 @@ class PlotForm(FlaskForm):
     show_j_C = SubmitField("Show plotwindow of j_C")
     amplification = SelectField("Choose amplification", choices = [(1000,"1k"),(10000,"100"),(100000,"10")])
     submit_amplification = SubmitField("Save amplification")
+    submit_I_C = SubmitField("Save I_C")
 
 class PlotOptionsForm(FlaskForm):
     checkbox = SelectMultipleField("checkbox",

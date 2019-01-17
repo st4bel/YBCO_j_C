@@ -3,7 +3,8 @@
 {% block content %}
 
 <h1>File: {{file.filename}}</h1>
-<p>Bridge: {{file.bridge.bridgename}}</p>
+<p>Bridge: <a href="{{url_for('bridge',bridgename=file.bridge.bridgename)}}">{{file.bridge.bridgename}}</a></p>
+<p>Substrate: <a href="{{url_for('substrate',substratename=file.bridge.substrate.substratename)}}">{{file.bridge.substrate.substratename}}</a></p>
 <form action="" method="post">
 <p>
   {{ form.delete() }}
@@ -42,6 +43,12 @@
 <form action="" method="post">
   {% if file.res!=None %}
   <p>ohmic resistance detected: R = {{ "%.5f"%file.res }}mOhm</p>
+  <p>
+    {{ form.submit_I_C}}
+  </p>
+  {% if file.bridge.j_C!=None %}
+  <span style="color: red;">I_C saved for bridge <a href="{{url_for('bridge',bridgename=file.bridge.bridgename)}}">{{file.bridge.bridgename}}</a>: {{"%.5f"%file.bridge.j_C}}</span>
+  {% endif %}
   {% endif %}
   {% if file.j_C!=None %}
   <p>critical current detected: I_C = {{ "%.3f"%file.j_C }}mA</p>

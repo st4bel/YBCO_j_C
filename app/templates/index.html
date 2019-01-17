@@ -17,4 +17,11 @@
     {{ form.submit() }}
   </p>
 </form>
+{% if substrates|length > 0 %}
+<br>
+<p>Measured Substrates:<p>
+{% for substrate in substrates %}
+<p><a href="{{url_for('substrate', substratename = substrate.substratename) }}">{{substrate.substratename}}</a></p>
+{% endfor %}
+{% endif %}
 {% endblock %}

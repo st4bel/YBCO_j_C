@@ -17,7 +17,7 @@ def index():
         for file in files:
             deleteFile(file.filename)
         return redirect(url_for("index"))
-    return render_template("index.html", title="home", files = files,form=form)
+    return render_template("index.html", title="home", files = files,form=form,substrates=Substrate.query.all())
 
 @app.route("/upload", methods = ["GET" ,"POST"])
 def upload():
@@ -78,6 +78,10 @@ def file(filename):
             file.amplification = form.amplification.data
             db.session.add(file)
             db.session.commit()
+        elif form.submit_I_C.data:
+            file.bridge.j_C = file.j_C
+            db.session.add(file)
+            db.session.commit()
 
         return redirect(url_for("file", filename = filename))
     if not os.path.isfile(plotpath(filename, "_plot.png")):
@@ -86,3 +90,15 @@ def file(filename):
         close_plot()
     form.process()
     return render_template("file.html",form = form, form2=form2, file = file, files = Document.query.all())
+
+@app.route("/substrate/<substratename>")
+def substrate(substratename):
+    substrate = Substrate.query.filter_by(substratename=substratename).first_or_404()
+
+    return render_template("substrate.html", substrate = substrate)
+
+@app.route("/bridge/<bridgename>")
+def bridge(bridgename):
+    bridge = Bridge.query.filter_by(bridgename=bridgename).first_or_404()
+
+    return render_template("bridge.html",bridge=bridge)
