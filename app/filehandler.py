@@ -41,3 +41,15 @@ def detect_substrate_bridge(filename):
     db.session.add(substrate)
     db.session.add(bridge)
     db.session.commit()
+
+def detect_picture_amp(filename):
+    splits = filename[:-4].split("_")
+    for split in splits:
+        if re.match(r"[S][0-9]+([a-z])?",split):
+            s=split
+        elif re.match(r"[A-B][1-9]",split):
+            b=split
+        elif re.match(r"[0-9]+[x]?",split):
+            v=re.sub("[a-z]+","", split)# removing the x if present
+    picture = Picture.query.filter_by(filename=filename).first()
+    # TODO: 

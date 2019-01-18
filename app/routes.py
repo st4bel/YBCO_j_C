@@ -26,16 +26,25 @@ def upload():
         for f in request.files.getlist("file"):
             filename = secure_filename(f.filename)
             flash(filename)
-            if Document.query.filter_by(filename=filename).first() is not None:
-                flash("File arleady uploaded")
-                return redirect(url_for("upload"))
-            new_document = Document(filename=filename)
-            new_document.remove_ohm=False
-            new_document.remove_offset=False
-            db.session.add(new_document)
+            if filename.split(".")[1] == "txt":
+                if Document.query.filter_by(filename=filename).first() is not None:
+                    flash("File arleady uploaded")
+                    return redirect(url_for("upload"))
+                new_document = Document(filename=filename)
+                new_document.remove_ohm=False
+                new_document.remove_offset=False
+                db.session.add(new_document)
+                db.session.commit()
+                detect_substrate_bridge(filename)
+            elif filename.split(".")[1] == "bmp":
+                if Picture.query.filter_by(filename = filename).first() is not None:
+                    flash("Picture already uploaded")
+                    return redirect(url_for("upload"))
+                new_picture = Picture(filename=filename)
+                db.session.add(new_picture)
+                db.session.commit()
+                detect_picture_amp(filename)
             f.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-            db.session.commit()
-            detect_substrate_bridge(filename)
         return redirect(url_for("index"))
     return render_template("upload.html", form=form, files = Document.query.all())
 
@@ -90,6 +99,12 @@ def file(filename):
         close_plot()
     form.process()
     return render_template("file.html",form = form, form2=form2, file = file, files = Document.query.all())
+
+@app.route("/picture/<filename>")
+def picture(filename):
+    picture = Picture.query.filter_by(filename=filename).first_or_404()
+
+    return render_template("picture.html", picture = picture)
 
 @app.route("/substrate/<substratename>")
 def substrate(substratename):

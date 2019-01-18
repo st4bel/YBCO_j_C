@@ -13,6 +13,16 @@ class Document(db.Model):
     def __repr__(self):
         return "<Document {}>".format(self.filename)
 
+class Picture(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    bridge_id = db.Column(db.Integer, db.ForeignKey("bridge.id"))
+    filename = db.Column(db.String(64))
+    amplification = db.Column(db.Integer)
+    pixelwidth = db.Column(db.Integer)
+
+    def __repr__(self):
+        return "<Picture {}>".format(self.filename)
+
 class Substrate(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     substratename = db.Column(db.String(32))
@@ -32,6 +42,7 @@ class Bridge(db.Model):
     res = db.Column(db.Float)
 
     documents = db.relationship("Document", backref = "bridge", lazy = "dynamic")
+    pictures = db.relationship("Picture", backref = "bridge", lazy = "dynamic")
 
     def __repr__(self):
         return "<Bridge {}>".format(self.bridgename)
