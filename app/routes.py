@@ -17,7 +17,7 @@ def index():
         for file in files:
             deleteFile(file.filename)
         return redirect(url_for("index"))
-    return render_template("index.html", title="home", files = files,form=form,substrates=Substrate.query.all())
+    return render_template("index.html", title="home", files = files,form=form,substrates=Substrate.query.all(),pictures=Picture.query.all())
 
 @app.route("/upload", methods = ["GET" ,"POST"])
 def upload():
@@ -36,6 +36,7 @@ def upload():
                 db.session.add(new_document)
                 db.session.commit()
                 detect_substrate_bridge(filename)
+                f.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
             elif filename.split(".")[1] == "bmp":
                 if Picture.query.filter_by(filename = filename).first() is not None:
                     flash("Picture already uploaded")
@@ -44,7 +45,8 @@ def upload():
                 db.session.add(new_picture)
                 db.session.commit()
                 detect_picture_amp(filename)
-            f.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+                f.save(plotpath(filename))
+                f.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
         return redirect(url_for("index"))
     return render_template("upload.html", form=form, files = Document.query.all())
 

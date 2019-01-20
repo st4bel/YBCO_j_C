@@ -79,7 +79,17 @@
           <a class="dropdown-item" href="{{url_for('file',filename = file.filename)}}">{{file.filename}}</a>
           {% endfor %}
         </div>
-      </li>
+        </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Pictures
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          {% for picture in pictures %}
+          <a class="dropdown-item" href="{{url_for('picture',filename = picture.filename)}}">{{picture.filename}}</a>
+          {% endfor %}
+        </div>
+        </li>
       </ul>
     </div>
     </nav>

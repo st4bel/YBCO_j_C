@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Picture: {{picture.filename}}</h1>
+<p>Bridge: <a href="{{url_for('bridge',bridgename = picture.bridge.bridgename)}}">{{picture.bridge.bridgename}}</a></p>
+<p>Substrate: <a href="{{url_for('substrate',substratename=picture.bridge.substrate.substratename)}}">{{picture.bridge.substrate.substratename}}</a></p>
+
+<p>Original image:<p>
+
+<p>
+  <img src="{{url_for('static',filename = picture.filename+'.png')}}" alt="File: {{picture.filename}}">
+</p>
+
+
+
+{% endblock %}

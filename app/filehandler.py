@@ -25,7 +25,7 @@ def detect_substrate_bridge(filename):
         elif re.match(r"[A-B][1-9]",split):
             b=split
         elif re.match(r"[V][0-9]",split):
-            v=split
+            v=int(split[1:])
     file = Document.query.filter_by(filename=filename).first()
     substrate = Substrate.query.filter_by(substratename=s).first()
     if substrate == None:
@@ -33,10 +33,14 @@ def detect_substrate_bridge(filename):
     bridge = Bridge.query.filter_by(bridgename=s+"_"+b).first()
     if bridge==None:
         bridge = Bridge(bridgename=s+"_"+b)
+        bridge.substrate=substrate
     file.bridge=bridge
-    bridge.substrate=substrate
-    if v != None:
-        file.amplification=int(v[1:])
+    if v == 100:
+        file.amplification=10000
+    elif v==10:
+        file.amplification=100000
+    else:
+        file.amplification=1000
     db.session.add(file)
     db.session.add(substrate)
     db.session.add(bridge)
@@ -52,4 +56,19 @@ def detect_picture_amp(filename):
         elif re.match(r"[0-9]+[x]?",split):
             v=re.sub("[a-z]+","", split)# removing the x if present
     picture = Picture.query.filter_by(filename=filename).first()
-    # TODO: 
+    substrate = Substrate.query.filter_by(substratename=s).first()
+    if substrate == None:
+        substrate = Substrate(substratename=s)
+    bridge = Bridge.query.filter_by(bridgename=s+"_"+b).first()
+    if bridge==None:
+        bridge = Bridge(bridgename=s+"_"+b)
+        bridge.substrate=substrate
+    picture.bridge=bridge
+    if v != None:
+        picture.amplification=int(v)
+    else:
+        picture.amplification=100
+    db.session.add(substrate)
+    db.session.add(bridge)
+    db.session.add(picture)
+    db.session.commit()
