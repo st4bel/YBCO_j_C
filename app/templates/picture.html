@@ -6,12 +6,43 @@
 <p>Bridge: <a href="{{url_for('bridge',bridgename = picture.bridge.bridgename)}}">{{picture.bridge.bridgename}}</a></p>
 <p>Substrate: <a href="{{url_for('substrate',substratename=picture.bridge.substrate.substratename)}}">{{picture.bridge.substrate.substratename}}</a></p>
 
+<form action="" method="post">
+<p>
+  {{ form.fourplot() }}
+</p>
+<p>
+  {{ form.threshold.label }}<br>
+  {{ form.threshold(value=form.threshold.default) }}
+  {% for error in form.threshold.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+  {% endfor %}
+</p>
+<p>
+  {{ form.brushsize.label }}<br>
+  {{ form.brushsize(value=form.brushsize.default) }}
+  {% for error in form.brushsize.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+  {% endfor %}
+</p>
+<p>
+  {{ form.set_threshold_brushsize() }}
+</p>
+</form>
+
 <p>Original image:<p>
 
 <p>
-  <img src="{{url_for('static',filename = picture.filename+'.png')}}" alt="File: {{picture.filename}}">
+  <img src="{{url_for('static',filename = picture.filename+'.png')}}" alt="File: {{picture.filename+'.png'}}">
 </p>
 
+<p>"4Plot"</p>
+
+<p>
+  <img src="{{url_for('static',filename = picture.filename+'_4er.png')}}" alt="File: {{picture.filename+'_434.png'}}">
+</p>
+<form action="" method="post">
+  <p>{{form.show_fourplot()}}</p>
+</form>
 
 
 {% endblock %}

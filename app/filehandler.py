@@ -1,5 +1,6 @@
 import os
 import re
+from app import app
 from flask import flash
 from app.models import *
 from app.j_C_intern import filepath, plotpath
@@ -68,6 +69,8 @@ def detect_picture_amp(filename):
         picture.amplification=int(v)
     else:
         picture.amplification=100
+    picture.threshold = app.config["THRESHOLD_START"]
+    picture.brushsize = app.config["BRUSHSIZE_START"]
     db.session.add(substrate)
     db.session.add(bridge)
     db.session.add(picture)

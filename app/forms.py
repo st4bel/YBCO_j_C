@@ -27,5 +27,11 @@ class DeleteAllFiles(FlaskForm):
     submit = SubmitField("Delete all uploaded files")
 
 class Editfile(FlaskForm):
-
     submit = SubmitField("Submit")
+
+class PictureForm(FlaskForm):
+    fourplot = SubmitField("Create Overview")
+    threshold = StringField("threshold")
+    brushsize = StringField("brushsize")
+    set_threshold_brushsize = SubmitField("Save threshold and brushsize")
+    show_fourplot = SubmitField("Show Plot of 4er")

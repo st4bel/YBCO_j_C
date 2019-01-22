@@ -3,6 +3,7 @@ import os
 from app.forms import *
 from app.models import *
 from app.j_C_intern import plot_file, filepath, plotpath, plot_j_C, close_plot, show_plot
+from app.bridgewidth_intern import plot_picture, cut_image, get_size
 from flask import render_template, url_for, flash, redirect, request
 from werkzeug.utils import secure_filename
 from app.filehandler import *
@@ -46,7 +47,7 @@ def upload():
                 db.session.commit()
                 detect_picture_amp(filename)
                 f.save(plotpath(filename))
-                f.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+                f.save(filepath(filename))
         return redirect(url_for("index"))
     return render_template("upload.html", form=form, files = Document.query.all())
 
@@ -102,11 +103,26 @@ def file(filename):
     form.process()
     return render_template("file.html",form = form, form2=form2, file = file, files = Document.query.all())
 
-@app.route("/picture/<filename>")
+@app.route("/picture/<filename>", methods=["POST","GET"])
 def picture(filename):
     picture = Picture.query.filter_by(filename=filename).first_or_404()
-
-    return render_template("picture.html", picture = picture)
+    form = PictureForm()
+    form.brushsize.default = picture.brushsize
+    form.threshold.default = picture.threshold
+    if request.method == "POST":
+        if form.fourplot.data:
+            plot_picture(filename)
+            close_plot()
+        elif form.show_fourplot.data:
+            plot.picture(filename)
+            show_plot()
+        elif form.set_threshold_brushsize:
+            picture.brushsize = form.brushsize.data
+            picture.threshold = form.threshold.data
+            db.session.add(picture)
+            db.session.commit()
+        return redirect(url_for("picture",filename=filename))
+    return render_template("picture.html", picture = picture, form = form)
 
 @app.route("/substrate/<substratename>")
 def substrate(substratename):

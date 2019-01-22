@@ -19,6 +19,8 @@ class Picture(db.Model):
     filename = db.Column(db.String(64))
     amplification = db.Column(db.Integer)
     pixelwidth = db.Column(db.Integer)
+    brushsize = db.Column(db.Integer)
+    threshold = db.Column(db.Integer)
 
     def __repr__(self):
         return "<Picture {}>".format(self.filename)
