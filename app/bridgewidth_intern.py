@@ -33,18 +33,18 @@ def read_blur_image(filename):
 def cut_image(filename,x,y,w,h):
     img = cv2.imread(filepath(filename))
     cut = img[y:y+h,x:x+w]
-    cut.save(plotpath(filename,"_cut.bmp"))
+    cut.save(plotpath(filename,"_cut.png"))
 
-def plot_picture(filename,threshold=100,brush=9,cut=False):
+def plot_picture(filename,cut=False):
     picture = Picture.query.filter_by(filename=filename).first()
     if cut:
-        img = cv2.imread(plotpath(filename,"_cut.bmp"))
+        img = cv2.imread(plotpath(filename,"_cut.png"))
     else:
-        img = cv2.imread(filepath(filename))
+        img = cv2.imread(plotpath(filename))
     imgray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(imgray,(brush,brush),0)
+    blur = cv2.GaussianBlur(imgray,(picture.brushsize,picture.brushsize),0)
 
-    ret,th = cv2.threshold(blur,threshold,255,cv2.THRESH_TOZERO_INV)
+    ret,th = cv2.threshold(blur,picture.threshold,255,cv2.THRESH_TOZERO_INV)
 
     smalestgap = np.size(img,0)
     gapprofile = []

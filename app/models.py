@@ -9,6 +9,7 @@ class Document(db.Model):
     amplification = db.Column(db.Integer, default = 1000)
     j_C = db.Column(db.Float)
     res = db.Column(db.Float)
+    res_border = db.Column(db.Float)
 
     def __repr__(self):
         return "<Document {}>".format(self.filename)

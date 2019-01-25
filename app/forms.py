@@ -17,6 +17,8 @@ class PlotForm(FlaskForm):
     amplification = SelectField("Choose amplification", choices = [(1000,"1k"),(10000,"100"),(100000,"10")])
     submit_amplification = SubmitField("Save amplification")
     submit_I_C = SubmitField("Save I_C")
+    set_border = StringField("Cut x for res-calculation [0.-1.]")
+    submit_border = SubmitField("Submit border")
 
 class PlotOptionsForm(FlaskForm):
     checkbox = SelectMultipleField("checkbox",

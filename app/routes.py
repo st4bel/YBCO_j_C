@@ -94,6 +94,10 @@ def file(filename):
             file.bridge.j_C = file.j_C
             db.session.add(file)
             db.session.commit()
+        elif form.submit_border.data:
+            file.res_border = float(form.set_border.data)
+            db.session.add(file)
+            db.session.commit()
 
         return redirect(url_for("file", filename = filename))
     if not os.path.isfile(plotpath(filename, "_plot.png")):
@@ -114,7 +118,7 @@ def picture(filename):
             plot_picture(filename)
             close_plot()
         elif form.show_fourplot.data:
-            plot.picture(filename)
+            plot_picture(filename)
             show_plot()
         elif form.set_threshold_brushsize:
             picture.brushsize = form.brushsize.data

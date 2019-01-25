@@ -20,6 +20,16 @@
   {% endfor %}
 </p>
 <p>
+  {{ form.set_border.label }}<br>
+  {{ form.set_border() }}
+  {% for error in form.set_border.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+  {% endfor %}
+</p>
+<p>
+  {{ form.submit_border() }}
+</p>
+<p>
   {{ form.submit_amplification() }}
 </p>
 </form>

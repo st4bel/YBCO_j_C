@@ -58,18 +58,16 @@ def ohmig_res(xdata,ydata):
 
     return p1
 
-def calculate_ohmig_res(xdata, ydata, j_C):
-    permutation = xdata.argsort()
-    xsorted = xdata[permutation]
-    ysorted = ydata[permutation]
+def calc_res_from_border(xdata, ydata, border=None:
     #cutting x and y to -j_C/2 <= x <= j_C/2
-    cut = np.logical_and(xdata>=-j_C/2,xdata<=j_C/2)
+    if border==None:
+        border = np.amax(xdata)/2
+    cut = np.logical_and(xdata>=-border,xdata<=border)
     xcut = xdata[cut]
     ycut = ydata[cut]
 
-    #polyfit for n=1
-    p1 = np.polyfit(xcut,ycut,1)
-    return p1
+    rise=np.polyfit(xcut,ycut,1)[0]
+    return rise
 
 def close_plot():
     plt.close()
