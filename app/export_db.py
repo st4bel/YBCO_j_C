@@ -2,10 +2,9 @@ import os
 import csv
 from app.models import Substrate, Bridge
 
-def export_substrate_to_dict(substratename):
+def export_substrate_to_dict(substratename,text=[]):
     substrate = Substrate.query.filter_by(substratename=substratename).first()
     bridges = Bridge.query.filter_by(substrate=substrate).order_by(Bridge.bridgename).all()
-    text = []
     text.append(["Substrate:"]+[substrate.substratename])
     text.append(["YBCO Layer in nm:"]+[substrate.YBCO_layer])
     text.append(["Au Layer in nm:"]+[substrate.Au_layer])

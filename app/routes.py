@@ -4,6 +4,7 @@ from app.forms import *
 from app.models import *
 from app.j_C_intern import plot_file, filepath, plotpath, plot_j_C, close_plot, show_plot
 from app.bridgewidth_intern import plot_picture, cut_image, get_size
+from app.export_db import export_substrate_to_dict, dict_to_csv
 from flask import render_template, url_for, flash, redirect, request
 from werkzeug.utils import secure_filename
 from app.filehandler import *
@@ -61,7 +62,7 @@ def file(filename):
     file = Document.query.filter_by(filename=filename).first_or_404()
     form = PlotForm()
     form.amplification.default = file.amplification
-
+    form.set_border.default = file.res_border
     form2 = PlotOptionsForm()
     if request.method == "POST":
         if form.calc_j_C.data:
@@ -132,7 +133,7 @@ def picture(filename):
 def substrate(substratename):
     substrate = Substrate.query.filter_by(substratename=substratename).first_or_404()
     form = SubstrateEditForm()
-    form.YCBO_layer.default = substrate.YCBO_layer
+    form.YBCO_layer.default = substrate.YBCO_layer
     form.Au_layer.default = substrate.Au_layer
     if request.method =="POST":
         if form.submit_layer.data:
@@ -148,3 +149,13 @@ def bridge(bridgename):
     bridge = Bridge.query.filter_by(bridgename=bridgename).first_or_404()
 
     return render_template("bridge.html",bridge=bridge)
+
+@app.route("/export")
+def export():
+    substrates = Substrate.query.order_by(Substrate.substratename).all()
+    text = []
+    for substrate in substrates:
+        text = export_substrate_to_dict(substrate.substratename,text)
+    dict_to_csv(csvname="substrates.csv",text=text)
+    flash("exported db into substrates.csv")
+    return redirect(url_for("index"))

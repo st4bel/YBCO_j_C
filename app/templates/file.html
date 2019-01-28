@@ -21,7 +21,7 @@
 </p>
 <p>
   {{ form.set_border.label }}<br>
-  {{ form.set_border() }}
+  {{ form.set_border(value = form.set_border.default) }}
   {% for error in form.set_border.errors %}
     <span style="color: red;">[{{ error }}]</span>
   {% endfor %}

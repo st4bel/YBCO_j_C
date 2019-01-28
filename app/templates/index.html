@@ -4,6 +4,14 @@
 
 <h1>Hello User</h1>
 
+{% if substrates|length > 0 %}
+<br>
+<p>Measured Substrates:<p>
+{% for substrate in substrates %}
+<p><a href="{{url_for('substrate', substratename = substrate.substratename) }}">{{substrate.substratename}}</a></p>
+{% endfor %}
+{% endif %}
+
 <p>Files uploaded right now:</p>
 {% if files|length == 0 %}
 <p>no files found -- <a href="{{url_for('upload')}}">Upload here!</a></p>
@@ -17,11 +25,4 @@
     {{ form.submit() }}
   </p>
 </form>
-{% if substrates|length > 0 %}
-<br>
-<p>Measured Substrates:<p>
-{% for substrate in substrates %}
-<p><a href="{{url_for('substrate', substratename = substrate.substratename) }}">{{substrate.substratename}}</a></p>
-{% endfor %}
-{% endif %}
 {% endblock %}

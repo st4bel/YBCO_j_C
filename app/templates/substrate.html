@@ -8,9 +8,9 @@
 
 <form action="" method="post">
   <p>
-    {{ form.YCBO_layer.label }}<br>
-    {{ form.YCBO_layer(value=form.YBCO_layer.default) }}
-    {% for error in form.YCBO_layer.errors %}
+    {{ form.YBCO_layer.label }}<br>
+    {{ form.YBCO_layer(value=form.YBCO_layer.default) }}
+    {% for error in form.YBCO_layer.errors %}
       <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
   </p>

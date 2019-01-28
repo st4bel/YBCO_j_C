@@ -66,7 +66,7 @@ def calc_res_from_border(xdata, ydata, border=None):
     xcut = xdata[cut]
     ycut = ydata[cut]
 
-    rise=np.polyfit(xcut,ycut,1)[0]
+    rise=np.polyfit(xcut,ycut,1)#[0]
     return rise
 
 def close_plot():
@@ -96,16 +96,17 @@ def plot_j_C(filename):
             ydata[i] -= p11[-1]
 
     if file.remove_ohm:
-        ohmic_res_p1 = ohmig_res(xdata,ydata)
+        #ohmic_res_p1 = ohmig_res(xdata,ydata)
+        ohmic_res_p1 = calc_res_from_border(xdata,ydata,file.res_border)
         for i in range(0,len(ydata)):
             ydata[i] -= ohmic_res_p1[0]*xdata[i]
 
     p11 = np.polyfit(xdata,ydata,11)
     p = np.poly1d(p11)
+    ohmic_res_p1 = calc_res_from_border(xdata,ydata,file.res_border)
     roots = solve_for_y_real(p11, p11[-1]+10)
     froots = filter_roots_by_range(roots = roots, min = np.amin(xdata), max = np.amax(xdata))
-    ohmic_res_p1 = ohmig_res(xdata,ydata)
-
+    #ohmic_res_p1 = ohmig_res(xdata,ydata)
     #discrete derivate
     #dy = np.zeros(xrange.shape,np.float)
     #dy[0:-1] = np.diff(p(xrange))/np.diff(xrange)
@@ -125,6 +126,8 @@ def plot_j_C(filename):
         file.j_C = froots[0]
 
     plt.plot(xrange,ohmic_res_p1[0]*xrange+ohmic_res_p1[-1],"--g", label = "R = %.5fmOhm"%ohmic_res_p1[0])
+    p_res=np.poly1d(ohmic_res_p1)
+    plt.plot(xrange,p_res(xrange),"-g")
     file.res = ohmic_res_p1[0]
     db.session.add(file)
     db.session.commit()
