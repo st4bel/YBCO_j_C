@@ -43,6 +43,7 @@ class Bridge(db.Model):
     bridgename = db.Column(db.String(32))
     j_C = db.Column(db.Float)
     res = db.Column(db.Float)
+    bridgewitdh = db.Column(db.Float)
 
     documents = db.relationship("Document", backref = "bridge", lazy = "dynamic")
     pictures = db.relationship("Picture", backref = "bridge", lazy = "dynamic")

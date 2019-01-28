@@ -128,11 +128,20 @@ def picture(filename):
         return redirect(url_for("picture",filename=filename))
     return render_template("picture.html", picture = picture, form = form)
 
-@app.route("/substrate/<substratename>")
+@app.route("/substrate/<substratename>", methods=["POST","GET"])
 def substrate(substratename):
     substrate = Substrate.query.filter_by(substratename=substratename).first_or_404()
+    form = SubstrateEditForm()
+    form.YCBO_layer.default = substrate.YCBO_layer
+    form.Au_layer.default = substrate.Au_layer
+    if request.method =="POST":
+        if form.submit_layer.data:
+            substrate.YBCO_layer = form.YBCO_layer.data
+            substrate.Au_layer = form.Au_layer.data
+            db.session.add(substrate)
+            db.session.commit()
 
-    return render_template("substrate.html", substrate = substrate)
+    return render_template("substrate.html", substrate = substrate, form = form)
 
 @app.route("/bridge/<bridgename>")
 def bridge(bridgename):

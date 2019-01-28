@@ -37,3 +37,8 @@ class PictureForm(FlaskForm):
     brushsize = StringField("brushsize")
     set_threshold_brushsize = SubmitField("Save threshold and brushsize")
     show_fourplot = SubmitField("Show Plot of 4er")
+
+class SubstrateEditForm(FlaskForm):
+    YBCO_layer = StringField("Enter YBCO layer thickness")
+    Au_layer = StringField("Enter Au layer thickness")
+    submit_layer = SubmitField("Submit")

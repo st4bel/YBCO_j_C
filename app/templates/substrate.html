@@ -5,6 +5,24 @@
 <h1>Substrate: {{substrate.substratename}}</h1>
 <p><a href="{{url_for('index')}}">Overview</a></p>
 <p>Measured bridges:<p>
+
+<form action="" method="post">
+  <p>
+    {{ form.YCBO_layer.label }}<br>
+    {{ form.YCBO_layer(value=form.YBCO_layer.default) }}
+    {% for error in form.YCBO_layer.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.Au_layer.label }}<br>
+    {{ form.Au_layer(value=form.Au_layer.default) }}
+    {% for error in form.Au_layer.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>{{ form.submit_layer() }}</p>
+</form>
 <table class="table table-dark">
   <thead>
     <tr>

@@ -58,7 +58,7 @@ def ohmig_res(xdata,ydata):
 
     return p1
 
-def calc_res_from_border(xdata, ydata, border=None:
+def calc_res_from_border(xdata, ydata, border=None):
     #cutting x and y to -j_C/2 <= x <= j_C/2
     if border==None:
         border = np.amax(xdata)/2
