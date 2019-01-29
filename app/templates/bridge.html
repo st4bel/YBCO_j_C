@@ -25,4 +25,26 @@
   </tbody>
 </table>
 
+<p>Pictures:<p>
+<table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">bridgewidth in um</th>
+      <th scope="col">Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for picture in bridge.pictures.all() %}
+    <tr>
+      <th scope="row">{{ picture.filename }}</th>
+      <th>{% if picture.pixelwidth %}
+        {{"%.5f"%(picture.pixelwidth*picture.amplification)}}
+      {% else %}Unknown{% endif %}</th>
+      <th><a href="{{url_for('picture', filename = picture.filename) }}">Link</a></th>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}

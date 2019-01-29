@@ -28,6 +28,7 @@
     <tr>
       <th scope="col">Name</th>
       <th scope="col">I_C in mA</th>
+      <th scope="col">Width in um</th>
       <th scope="col">Link</th>
     </tr>
   </thead>
@@ -36,6 +37,7 @@
     <tr>
       <th scope="row">{{ bridge.bridgename }}</th>
       <th>{% if bridge.j_C %}{{ "%.5f"%bridge.j_C }}{% else %}Unknown{% endif %}</th>
+      <th>{% if bridge.bridgewitdh %}{{ "%.5f"%bridge.bridgewitdh }}{% else %}Unknown{% endif %}</th>
       <th><a href="{{url_for('bridge', bridgename = bridge.bridgename) }}">Link</a></th>
     </tr>
     {% endfor %}

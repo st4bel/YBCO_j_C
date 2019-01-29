@@ -32,11 +32,20 @@ class Editfile(FlaskForm):
     submit = SubmitField("Submit")
 
 class PictureForm(FlaskForm):
+    delete_file = SubmitField("Delete this file")
     fourplot = SubmitField("Create Overview")
     threshold = StringField("threshold")
     brushsize = StringField("brushsize")
     set_threshold_brushsize = SubmitField("Save threshold and brushsize")
     show_fourplot = SubmitField("Show Plot of 4er")
+    overwrite_width = StringField("Overwrite Width in px")
+    submit_overwrite = SubmitField("Save Overwrite")
+    submit_width = SubmitField("Save width for Bridge")
+    cut_x = StringField("x")
+    cut_y = StringField("y")
+    cut_dx = StringField("dx")
+    cut_dy = StringField("dy")
+    submit_cut = SubmitField("Cut!")
 
 class SubstrateEditForm(FlaskForm):
     YBCO_layer = StringField("Enter YBCO layer thickness")

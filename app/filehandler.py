@@ -17,6 +17,17 @@ def deleteFile(filename):
         os.remove(plotpath(filename,"_j_C.png"))
     flash("removed all Files of: "+filename)
 
+def deletePicture(filename):
+    picture = Picture.query.filter_by(filename=filename).first()
+    db.session.delete(picture)
+    db.session.commit()
+    os.remove(filepath(filename))
+    if os.path.isfile(plotpath(filename,"_cut.png")):
+        os.remove(plotpath(filename,"_cut.png"))
+    if os.path.isfile(plotpath(filename,"_4er.png")):
+        os.remove(plotpath(filename,"_4er.png"))
+    flash("removed all Files of: "+filename)
+
 def detect_substrate_bridge(filename):
     splits = filename[:-4].split("_")#".txt" wegschneiden
     v=None
@@ -66,9 +77,9 @@ def detect_picture_amp(filename):
         bridge.substrate=substrate
     picture.bridge=bridge
     if v != None:
-        picture.amplification=int(v)
+        picture.amplification = app.config["SCALE_50"] if int(v)==50 else app.config["SCALE_100"]
     else:
-        picture.amplification=100
+        picture.amplification=app.config["SCALE_100"]
     picture.threshold = app.config["THRESHOLD_START"]
     picture.brushsize = app.config["BRUSHSIZE_START"]
     db.session.add(substrate)

@@ -1,10 +1,11 @@
+from app import app
 import cv2
 import os
 import numpy as np
 from scipy.signal import argrelextrema
 from matplotlib import pyplot as plt
 from app.j_C_intern import plotpath, filepath
-from app.models import Picture, Bridge
+from app.models import *
 
 #def plotpath(filename, extension=".png"):
 #    return os.path.join(app.config["PLOT_FOLDER"],filename + extension)
@@ -30,10 +31,10 @@ def read_blur_image(filename):
     blur = cv2.GaussianBlur(imgray,(9,9),0)
     return blur
 
-def cut_image(filename,x,y,w,h):
-    img = cv2.imread(filepath(filename))
-    cut = img[y:y+h,x:x+w]
-    cut.save(plotpath(filename,"_cut.png"))
+def cut_image(filename,x,y,dx,dy):
+    img = cv2.imread(plotpath(filename))
+    cut = img[y:y+dy,x:x+dx]
+    cv2.imwrite(plotpath(filename,"_cut.png"),cut)
 
 def plot_picture(filename,cut=False):
     picture = Picture.query.filter_by(filename=filename).first()
@@ -61,8 +62,10 @@ def plot_picture(filename,cut=False):
         else:
             gapprofile.append(np.size(img,0))
     for center in position:
-        cv2.circle(img,center,10,(0,0,255),2)
-    picture.pixelwidth = smalestgap
+        cv2.circle(img,center,5,(0,0,255),2)
+    picture.pixelwidth = int(smalestgap)
+    db.session.add(picture)
+    db.session.commit()
     plt.subplot(2,2,1),plt.plot(bestprofile)
     plt.ylabel("gray 0-255")
     plt.xlabel("y-position in px")
@@ -71,6 +74,7 @@ def plot_picture(filename,cut=False):
     plt.ylabel("gapdistance in px")
     plt.xlabel("x-position in px")
     plt.title("gapdistance over x")
+    plt.grid(b=True,which="major",axis="y")
     plt.subplot(2,2,3),plt.imshow(img)
     plt.subplot(2,2,4),plt.imshow(th)
     plt.savefig(plotpath(filename,"_4er.png"))

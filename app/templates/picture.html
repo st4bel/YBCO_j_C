@@ -7,6 +7,7 @@
 <p>Substrate: <a href="{{url_for('substrate',substratename=picture.bridge.substrate.substratename)}}">{{picture.bridge.substrate.substratename}}</a></p>
 
 <form action="" method="post">
+<p>{{form.delete_file()}}</p>
 <p>
   {{ form.fourplot() }}
 </p>
@@ -27,13 +28,10 @@
 <p>
   {{ form.set_threshold_brushsize() }}
 </p>
+<p>Cut Image: [x,y,dx,dy] 0 is top-left corner</p>
+<p>{{form.cut_x(value=form.cut_x.default)}}{{form.cut_y(value=form.cut_y.default)}}{{form.cut_dx(value=form.cut_dx.default)}}{{form.cut_dy(value=form.cut_dy.default)}}</p>
+<p>{{form.submit_cut()}}</p>
 </form>
-
-<p>Original image:<p>
-
-<p>
-  <img src="{{url_for('static',filename = picture.filename+'.png')}}" alt="File: {{picture.filename+'.png'}}">
-</p>
 
 <p>"4Plot"</p>
 
@@ -42,7 +40,29 @@
 </p>
 <form action="" method="post">
   <p>{{form.show_fourplot()}}</p>
-</form>
 
+{% if picture.pixelwidth != None %}
+<p>Bridgewidth detected: {{picture.pixelwidth}}px</p>
+<p>equals {{picture.pixelwidth*picture.amplification}}um</p>
+<p>{{form.overwrite_width.label}}</p>
+<p>{{form.overwrite_width(value=picture.pixelwidth)}}</p>
+<p>{{form.submit_overwrite()}}</p>
+<p>{{form.submit_width()}}</p>
+{% endif %}
+{% if picture.bridge.bridgewitdh != None %}
+<span style="color: red;">Bridgewidth saved for {{picture.bridge.bridgename}}: {{picture.bridge.bridgewitdh}}</span>
+{% endif %}
+
+</form>
+<p>Original image:<p>
+
+<p>
+  <img src="{{url_for('static',filename = picture.filename+'.png')}}" alt="File: {{picture.filename+'.png'}}">
+</p>
+
+<p>Cut_Image</p>
+<p>
+  <img src="{{url_for('static',filename = picture.filename+'_cut.png')}}" alt="File: {{picture.filename+'_cut.png'}}">
+</p>
 
 {% endblock %}

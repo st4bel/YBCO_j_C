@@ -111,22 +111,57 @@ def file(filename):
 @app.route("/picture/<filename>", methods=["POST","GET"])
 def picture(filename):
     picture = Picture.query.filter_by(filename=filename).first_or_404()
+    size = get_size(plotpath(picture.filename))
     form = PictureForm()
     form.brushsize.default = picture.brushsize
     form.threshold.default = picture.threshold
+    form.cut_x.default = 0
+    form.cut_y.default = 0
+    form.cut_dx.default = size[1]
+    form.cut_dy.default = size[0]
     if request.method == "POST":
+        if form.delete_file.data:
+            deletePicture(picture.filename)
+            redirect(url_for("index"))
         if form.fourplot.data:
-            plot_picture(filename)
+            plot_picture(filename,cut=True)
             close_plot()
-        elif form.show_fourplot.data:
-            plot_picture(filename)
+        if form.show_fourplot.data:
+            plot_picture(filename,cut=True)
             show_plot()
-        elif form.set_threshold_brushsize:
+        if form.set_threshold_brushsize.data:
             picture.brushsize = form.brushsize.data
             picture.threshold = form.threshold.data
             db.session.add(picture)
             db.session.commit()
+        if form.submit_width.data:
+            picture.bridge.bridgewitdh = picture.pixelwidth*picture.amplification
+            db.session.add(picture)
+            db.session.commit()
+        if form.submit_overwrite.data:
+            flash("overwrite")
+            picture.pixelwidth = int(form.overwrite_width.data)
+            db.session.add(picture)
+            db.session.commit()
+        if form.submit_cut.data:
+            x=int(form.cut_x.data)
+            y=int(form.cut_y.data)
+            dx=int(form.cut_dx.data)
+            dy=int(form.cut_dy.data)
+            if x>size[1]:
+                x=0
+            if  x+dx> size[1]:
+                dx=size[1]-x
+            if y>size[0]:
+                y=0
+            if y+dy>size[0]:
+                dy=size[0]-y
+            cut_image(picture.filename,x=x,y=y,dx=dx,dy=dy)
         return redirect(url_for("picture",filename=filename))
+    if not os.path.isfile(plotpath(filename, "_cut.png")):
+        #creating simple plots
+        size = get_size(plotpath(picture.filename))
+        #cut_image(picture.filename,x=10,y=10,dx=size[1]-20,dy=size[0]-20)
     return render_template("picture.html", picture = picture, form = form)
 
 @app.route("/substrate/<substratename>", methods=["POST","GET"])
