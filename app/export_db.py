@@ -10,7 +10,8 @@ def export_substrate_to_dict(substratename,text=[]):
     text.append(["Au Layer in nm:"]+[substrate.Au_layer])
     text.append(["Bridgename"]+["I_C in mA"]+["Bridgewidth in px"])
     for bridge in bridges:
-        text.append([bridge.bridgename]+[bridge.j_C]+[bridge.bridgewitdh])
+        if bridge.j_C != None or bridge.bridgewitdh != None:
+            text.append([bridge.bridgename]+[str(bridge.j_C).replace(".",",")]+[str(bridge.bridgewitdh).replace(".",",")])
     return text
 
 def dict_to_csv(csvname,text,delimiter=";"):

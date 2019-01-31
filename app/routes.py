@@ -161,7 +161,7 @@ def picture(filename):
     if not os.path.isfile(plotpath(filename, "_cut.png")):
         #creating simple plots
         size = get_size(plotpath(picture.filename))
-        #cut_image(picture.filename,x=10,y=10,dx=size[1]-20,dy=size[0]-20)
+        cut_image(picture.filename,x=10,y=10,dx=size[1]-20,dy=size[0]-20)
     return render_template("picture.html", picture = picture, form = form)
 
 @app.route("/substrate/<substratename>", methods=["POST","GET"])
