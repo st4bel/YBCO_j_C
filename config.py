@@ -11,7 +11,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    THRESHOLD_START = 120
+    THRESHOLD_START = 150
     BRUSHSIZE_START = 9
     SCALE_50 = 0.1544
     SCALE_100 = 0.07993
